@@ -1,13 +1,25 @@
 {
-    "name": "moneymaxim/trustpilot-invitation-api",
+    "name": "ITspirit/trustpilot-invitation-api",
     "description": "A PHP library for accessing the Trustpilot Invitation API",
+    "license": "MIT",
+    "type": "project",
+    "keywords": [
+      "trustpilot",
+      "review",
+      "invitation",
+      "api"
+    ],
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.6.0",
         "guzzlehttp/guzzle": "~6.0",
         "moneymaxim/trustpilot-authenticator": "^0.1.1"
     },
-    "license": "MIT",
     "authors": [
+        {
+          "name": "Michael Frank",
+          "email": "contact@phpdoctor.cc",
+          "homepage": "https://www.the-Spirit-of-IT.com/"
+        },
         {
             "name": "Andrew Carter",
             "email": "andrew.carter@moneymaxim.co.uk"
@@ -22,6 +34,13 @@
         "psr-4": {
             "Trustpilot\\Test\\Api\\Invitation\\": "test/"
         }
-    }
+    },
+  "config": {
+    "platform": {
+      "php": "5.6.11"
+    },
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
 }
 
