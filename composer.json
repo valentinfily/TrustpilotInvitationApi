@@ -1,5 +1,5 @@
 {
-    "name": "ITspirit/trustpilot-invitation-api",
+    "name": "itspirit/trustpilot-invitation-api",
     "description": "A PHP library for accessing the Trustpilot Invitation API",
     "license": "MIT",
     "type": "project",
