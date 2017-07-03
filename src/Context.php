@@ -4,29 +4,19 @@ namespace Trustpilot\Api\Invitation;
 
 class Context
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $businessUnitId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $templateId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $redirectUri;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $tags;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
     /**

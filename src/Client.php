@@ -10,18 +10,13 @@ class Client
 {
     const ENDPOINT = 'https://invitations-api.trustpilot.com/v1/private/business-units/';
 
-    /**
-     * @var AccessToken
-     */
+    /** @var AccessToken */
     private $accessToken;
 
-    /**
-     * @var GuzzleClientInterface
-     */
+    /** @var GuzzleClientInterface */
     private $guzzle;
 
     /**
-     * @param string $apiKey
      * @param AccessToken $accessToken
      * @param GuzzleClientInterface $guzzle
      */
@@ -57,6 +52,7 @@ class Client
      * @param Sender $sender
      * @param string $referenceId
      * @param \DateTimeInterface $time
+     * @return array
      */
     public function invite(Context $context, Recipient $recipient, Sender $sender, $referenceId, \DateTimeInterface $time = null)
     {

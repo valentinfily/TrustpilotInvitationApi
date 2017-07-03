@@ -4,19 +4,13 @@ namespace Trustpilot\Api\Invitation;
 
 class Sender
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $email;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $replyEmail;
 
     /**
