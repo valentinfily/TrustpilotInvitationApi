@@ -1,21 +1,17 @@
 # Trustpilot Invitation API Client
 
-[![Latest Stable Version](https://poser.pugx.org/moneymaxim/trustpilot-invitation-api/v/stable)](https://packagist.org/packages/moneymaxim/trustpilot-invitation-api)
-[![Total Downloads](https://poser.pugx.org/moneymaxim/trustpilot-invitation-api/downloads)](https://packagist.org/packages/moneymaxim/trustpilot-invitation-api)
-[![License](https://poser.pugx.org/moneymaxim/trustpilot-invitation-api/license)](https://packagist.org/packages/moneymaxim/trustpilot-invitation-api)
+[![Latest Stable Version](https://poser.pugx.org/itspirit/trustpilot-invitation-api/v/stable)](https://packagist.org/packages/itspirit/trustpilot-invitation-api)
+[![Total Downloads](https://poser.pugx.org/itspirit/trustpilot-invitation-api/downloads)](https://packagist.org/packages/itspirit/trustpilot-invitation-api)
+[![License](https://poser.pugx.org/itspirit/trustpilot-invitation-api/license)](https://packagist.org/packages/itspirit/trustpilot-invitation-api)
 
 A PHP library for accessing the [Trustpilot Invitation API](https://developers.trustpilot.com/invitation-api).
-
-This library has been developed and open sourced by [moneymaxim](https://www.moneymaxim.co.uk).
-
-We are currently on the look out for PHP programming talent, so please [get in touch](mailto:andrew.carter@moneymaxim.co.uk) if you are interested.
 
 ## Install
 
 Install using [composer](https://getcomposer.org/):
 
 ```sh
-composer install moneymaxim/trustpilot-invitation-api
+composer install itspirit/trustpilot-invitation-api
 ```
 
 ## Usage
@@ -27,8 +23,8 @@ use Trustpilot\Api\Invitation\Recipient;
 use Trustpilot\Api\Invitation\Sender;
 use Trustpilot\Api\Invitation\Context;
 
-$authenticator = new Authenticator();
-$accessToken = $authenticator->getAccessToken($apiKey, $apiToken, $username, $password);
+$authenticator = new Authenticator($apiKey, $apiToken, $username, $password);
+$accessToken = $authenticator->getAccessToken();
 
 $client = new Client($accessToken);
 
