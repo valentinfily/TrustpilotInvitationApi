@@ -96,7 +96,7 @@ class Client
         if (empty($businessUnitId)) {
             throw new InvitationException('Missing BusinessUnitId on calling getInvitationTemplates');
         }
-        return $this->makeRequest($businessUnitId . '/templates ');
+        return $this->makeRequest($businessUnitId . '/templates');
     }
 
     /**
