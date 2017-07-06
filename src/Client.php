@@ -86,6 +86,16 @@ class Client
         return $this->makeRequest($context->getBusinessUnitId() . '/invitation-links', $json);
     }
 
+
+    /**
+     * @param InvitationContext $context
+     * @return array
+     */
+    public function getInvitationTemplates(InvitationContext $context)
+    {
+        return $this->makeRequest($context->getBusinessUnitId() . '/templates ');
+    }
+
     /**
      * @param string $url
      * @param array $json
