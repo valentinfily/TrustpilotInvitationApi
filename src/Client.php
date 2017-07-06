@@ -86,14 +86,17 @@ class Client
         return $this->makeRequest($context->getBusinessUnitId() . '/invitation-links', $json);
     }
 
-
     /**
-     * @param InvitationContext $context
+     * @param string $businessUnitId
      * @return array
+     * @throws InvitationException
      */
-    public function getInvitationTemplates(InvitationContext $context)
+    public function getInvitationTemplates($businessUnitId)
     {
-        return $this->makeRequest($context->getBusinessUnitId() . '/templates ');
+        if (empty($businessUnitId)) {
+            throw new InvitationException('Missing BusinessUnitId on calling getInvitationTemplates');
+        }
+        return $this->makeRequest($businessUnitId . '/templates ');
     }
 
     /**
