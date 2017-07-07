@@ -14,6 +14,9 @@ class Client
     /** @var AccessToken */
     private $accessToken;
 
+    /** @var \Logger */
+    private $logger;
+
     /** @var string */
     private $endpoint;
 
@@ -22,12 +25,14 @@ class Client
 
     /**
      * @param AccessToken $accessToken
+     * @param \Logger $logger
      * @param string $endpoint
      * @param GuzzleClientInterface $guzzle
      */
-    public function __construct(AccessToken $accessToken, $endpoint = null, GuzzleClientInterface $guzzle = null)
+    public function __construct(AccessToken $accessToken, \Logger $logger = null, $endpoint = null, GuzzleClientInterface $guzzle = null)
     {
         $this->accessToken = $accessToken;
+        $this->logger = $logger;
         $this->guzzle = (null !== $guzzle) ? $guzzle : new GuzzleClient();
         $this->endpoint = $endpoint ?: self::ENDPOINT;
     }
@@ -94,6 +99,7 @@ class Client
     public function getInvitationTemplates($businessUnitId)
     {
         if (empty($businessUnitId)) {
+            $this->log('Missing BusinessUnitId on calling getInvitationTemplates');
             throw new InvitationException('Missing BusinessUnitId on calling getInvitationTemplates');
         }
         return $this->makeRequest($businessUnitId . '/templates');
@@ -114,6 +120,8 @@ class Client
             $options['json'] = $json;
         }
 
+        $this->log($options, 'debug');
+
         return $this->callEndpointAndGetBodyData($method, $url, $options);
     }
 
@@ -126,9 +134,26 @@ class Client
                 $options
             );
         } catch (GuzzleException $e) {
+            $this->log('Error calling callEndpointAndGetBodyData: ' . $e->getMessage());
             throw new InvitationException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode((string) $response->getBody(), true);
+    }
+
+    private function log($value, $logLevel = 'error')
+    {
+        if ($this->logger !== null) {
+            switch ($logLevel) {
+                case 'debug':
+                    $this->logger->debug(var_export($value, true));
+                    break;
+                case 'error':
+                    $this->logger->error(var_export($value, true));
+                    break;
+                default:
+                    $this->logger->info(var_export($value, true));
+            }
+        }
     }
 }
