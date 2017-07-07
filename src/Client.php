@@ -86,6 +86,7 @@ class Client
                 'email' => $recipient->getEmail(),
                 'name' => $recipient->getName()
             ],
+            'email' => $recipient->getEmail(),
             'redirectUri' => $context->getRedirectUri(),
         ];
         return $this->makeRequest($context->getBusinessUnitId() . '/invitation-links', $json);
