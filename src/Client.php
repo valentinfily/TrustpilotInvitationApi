@@ -82,10 +82,7 @@ class Client
             'locale' => $context->getLocale(),
             'products' => $products,
             //'productIds' => [],
-            'consumer' => [
-                'email' => $recipient->getEmail(),
-                'name' => $recipient->getName()
-            ],
+            'name' => $recipient->getName(),
             'email' => $recipient->getEmail(),
             'redirectUri' => $context->getRedirectUri(),
         ];
