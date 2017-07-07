@@ -120,8 +120,6 @@ class Client
             $options['json'] = $json;
         }
 
-        $this->log($options, 'debug');
-
         return $this->callEndpointAndGetBodyData($method, $url, $options);
     }
 
@@ -135,6 +133,10 @@ class Client
             );
         } catch (GuzzleException $e) {
             $this->log('Error calling callEndpointAndGetBodyData: ' . $e->getMessage());
+            $this->log('Passed options: ' . var_export($options, true));
+            $this->log('Method: ' . $method);
+            $this->log('Endpoint: ' . self::ENDPOINT . $urlExtension);
+
             throw new InvitationException($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -146,13 +148,13 @@ class Client
         if ($this->logger !== null) {
             switch ($logLevel) {
                 case 'debug':
-                    $this->logger->debug(var_export($value, true));
+                    $this->logger->debug($value);
                     break;
                 case 'error':
-                    $this->logger->error(var_export($value, true));
+                    $this->logger->error($value);
                     break;
                 default:
-                    $this->logger->info(var_export($value, true));
+                    $this->logger->info($value);
             }
         }
     }
