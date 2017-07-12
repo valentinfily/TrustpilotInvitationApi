@@ -103,8 +103,6 @@ class Client
                 'email' => $recipient->getEmail(),
                 'name' => $recipient->getName()
             ],
-            'email' => $recipient->getEmail(),
-            'name' => $recipient->getName(),
             'redirectUri' => $context->getRedirectUri(),
         ];
 
@@ -180,7 +178,6 @@ class Client
 
     private function callEndpointAndGetBodyData($method, $url, $options)
     {
-            $this->log('Passed options: ' . var_export($options, true));
         try {
             $response = $this->guzzle->request(
                 $method,
