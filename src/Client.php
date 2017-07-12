@@ -135,7 +135,7 @@ class Client
 
         $url = 'product-reviews/business-units/' . $businessUnitId . '/reviews';
 
-        return $this->makeRequest($url, null, $query, $this->endpointApi);
+        return $this->makeRequest($url, [], $query, $this->endpointApi);
     }
 
     /**
@@ -151,7 +151,7 @@ class Client
         }
         $url = 'private/business-units/' . $businessUnitId . '/templates';
 
-        return $this->makeRequest($url, null, [], $this->endpointInvitationApi);
+        return $this->makeRequest($url, [], [], $this->endpointInvitationApi);
     }
 
     /**
@@ -166,7 +166,7 @@ class Client
         $method = 'GET';
         $options = ['query' => array_merge(['token' => $this->accessToken->getToken()], $queryOptions)];
 
-        if (null !== $json) {
+        if (!empty($json)) {
             $method = 'POST';
             $options['json'] = $json;
         }
