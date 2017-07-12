@@ -99,8 +99,10 @@ class Client
         $json = [
             'referenceId' => $referenceId,
             'locale' => $context->getLocale(),
-            'name' => $recipient->getName(),
-            'email' => $recipient->getEmail(),
+            'consumer' => [
+                'name' => $recipient->getName(),
+                'email' => $recipient->getEmail()
+            ],
             'redirectUri' => $context->getRedirectUri(),
         ];
 
