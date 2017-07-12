@@ -9,7 +9,7 @@ use Trustpilot\Api\Authenticator\AccessToken;
 
 class Client
 {
-    const ENDPOINT = 'https://invitations-api.trustpilot.com/v1/private/business-units/';
+    const ENDPOINT = 'https://invitations-api.trustpilot.com/v1/';
 
     /** @var AccessToken */
     private $accessToken;
@@ -65,28 +65,60 @@ class Client
             'redirectUri' => $context->getRedirectUri(),
         ];
 
-        return $this->makeRequest($context->getBusinessUnitId() . '/invitations', $json);
+        return $this->makeRequest('private/business-units/' . $context->getBusinessUnitId() . '/invitations', $json);
     }
 
     /**
      * @param ProductReviewInvitationContext $context
      * @param Recipient $recipient
-     * @param Product[] $products
      * @param $referenceId
+     * @param Product[] $productsIds
+     * @param Product[] $products
      * @return array
      */
-    public function productReviewInvitation(ProductReviewInvitationContext $context, Recipient $recipient, array $products, $referenceId)
-    {
+    public function productReviewInvitation(
+        ProductReviewInvitationContext $context,
+        Recipient $recipient,
+        $referenceId,
+        array $productsIds = [],
+        array $products = []
+    ) {
         $json = [
             'referenceId' => $referenceId,
             'locale' => $context->getLocale(),
-            'products' => $products,
-            //'productIds' => [],
             'name' => $recipient->getName(),
             'email' => $recipient->getEmail(),
             'redirectUri' => $context->getRedirectUri(),
         ];
-        return $this->makeRequest($context->getBusinessUnitId() . '/invitation-links', $json);
+
+        $json[empty($productsIds) ? 'products' : 'productIds'] = empty($productsIds) ? $products : $productsIds;
+
+        return $this->makeRequest('private/product-reviews/' . $context->getBusinessUnitId() . '/invitation-links', $json);
+    }
+
+    /**
+     * @param string $businessUnitId
+     * @param string[] $sku
+     * @param string $language
+     * @param int $page
+     * @param int $perPage
+     * @return array
+     */
+    public function getProductReviews(
+        $businessUnitId,
+        $sku,
+        $language = 'de',
+        $page = 1,
+        $perPage = 100
+    ) {
+        $query = [
+            'page' => $page,
+            'perPage' => $perPage,
+            'sku' => implode(',', $sku),
+            'language' => $language,
+        ];
+
+        return $this->makeRequest('private/product-reviews/' . $businessUnitId . '/reviews', null, $query);
     }
 
     /**
@@ -100,18 +132,19 @@ class Client
             $this->log('Missing BusinessUnitId on calling getInvitationTemplates');
             throw new InvitationException('Missing BusinessUnitId on calling getInvitationTemplates');
         }
-        return $this->makeRequest($businessUnitId . '/templates');
+        return $this->makeRequest('private/business-units/' . $businessUnitId . '/templates');
     }
 
     /**
      * @param string $url
      * @param array $json
+     * @param array $queryOptions
      * @return array
      */
-    private function makeRequest($url, array $json = null)
+    private function makeRequest($url, array $json = null, array $queryOptions = [])
     {
         $method = 'GET';
-        $options = ['query' => ['token' => $this->accessToken->getToken()]];
+        $options = ['query' => array_merge(['token' => $this->accessToken->getToken()], $queryOptions)];
 
         if (null !== $json) {
             $method = 'POST';
@@ -126,7 +159,7 @@ class Client
         try {
             $response = $this->guzzle->request(
                 $method,
-                self::ENDPOINT . $urlExtension,
+                $this->endpoint . $urlExtension,
                 $options
             );
         } catch (GuzzleException $e) {
