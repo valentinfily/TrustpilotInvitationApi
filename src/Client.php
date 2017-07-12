@@ -9,7 +9,8 @@ use Trustpilot\Api\Authenticator\AccessToken;
 
 class Client
 {
-    const ENDPOINT = 'https://invitations-api.trustpilot.com/v1/';
+    const INVITATIONS_API_ENDPOINT = 'https://invitations-api.trustpilot.com/v1/';
+    const API_ENDPOINT = 'https://api.trustpilot.com/v1/';
 
     /** @var AccessToken */
     private $accessToken;
@@ -18,7 +19,10 @@ class Client
     private $logger;
 
     /** @var string */
-    private $endpoint;
+    private $endpointApi;
+
+    /** @var string */
+    private $endpointInvitationApi;
 
     /** @var GuzzleClientInterface */
     private $guzzle;
@@ -26,15 +30,22 @@ class Client
     /**
      * @param AccessToken $accessToken
      * @param \Logger $logger
-     * @param string $endpoint
+     * @param string $apiInvitationEndpoint
+     * @param string $invitationApiEndpoint
      * @param GuzzleClientInterface $guzzle
      */
-    public function __construct(AccessToken $accessToken, \Logger $logger = null, $endpoint = null, GuzzleClientInterface $guzzle = null)
-    {
+    public function __construct(
+        AccessToken $accessToken,
+        \Logger $logger = null,
+        $apiInvitationEndpoint = null,
+        $invitationApiEndpoint = null,
+        GuzzleClientInterface $guzzle = null
+    ) {
         $this->accessToken = $accessToken;
         $this->logger = $logger;
         $this->guzzle = (null !== $guzzle) ? $guzzle : new GuzzleClient();
-        $this->endpoint = $endpoint ?: self::ENDPOINT;
+        $this->endpointApi = $apiInvitationEndpoint ?: self::API_ENDPOINT;
+        $this->endpointInvitationApi = $invitationApiEndpoint ?: self::INVITATIONS_API_ENDPOINT;
     }
 
     /**
@@ -65,7 +76,9 @@ class Client
             'redirectUri' => $context->getRedirectUri(),
         ];
 
-        return $this->makeRequest('private/business-units/' . $context->getBusinessUnitId() . '/invitations', $json);
+        $url = 'private/business-units/' . $context->getBusinessUnitId() . '/invitations';
+
+        return $this->makeRequest($url, $json, [], $this->endpointInvitationApi);
     }
 
     /**
@@ -93,7 +106,9 @@ class Client
 
         $json[empty($productsIds) ? 'products' : 'productIds'] = empty($productsIds) ? $products : $productsIds;
 
-        return $this->makeRequest('private/product-reviews/business-units/' . $context->getBusinessUnitId() . '/invitation-links', $json);
+        $url = 'private/product-reviews/business-units/' . $context->getBusinessUnitId() . '/invitation-links';
+
+        return $this->makeRequest($url, $json, [], $this->endpointApi);
     }
 
     /**
@@ -118,7 +133,9 @@ class Client
             'language' => $language,
         ];
 
-        return $this->makeRequest('product-reviews/business-units/' . $businessUnitId . '/reviews', null, $query);
+        $url = 'product-reviews/business-units/' . $businessUnitId . '/reviews';
+
+        return $this->makeRequest($url, null, $query, $this->endpointApi);
     }
 
     /**
@@ -132,16 +149,19 @@ class Client
             $this->log('Missing BusinessUnitId on calling getInvitationTemplates');
             throw new InvitationException('Missing BusinessUnitId on calling getInvitationTemplates');
         }
-        return $this->makeRequest('private/business-units/' . $businessUnitId . '/templates');
+        $url = 'private/business-units/' . $businessUnitId . '/templates';
+
+        return $this->makeRequest($url, null, [], $this->endpointInvitationApi);
     }
 
     /**
      * @param string $url
      * @param array $json
      * @param array $queryOptions
+     * @param string $endpoint
      * @return array
      */
-    private function makeRequest($url, array $json = null, array $queryOptions = [])
+    private function makeRequest($url, array $json, array $queryOptions, $endpoint)
     {
         $method = 'GET';
         $options = ['query' => array_merge(['token' => $this->accessToken->getToken()], $queryOptions)];
@@ -151,22 +171,22 @@ class Client
             $options['json'] = $json;
         }
 
-        return $this->callEndpointAndGetBodyData($method, $url, $options);
+        return $this->callEndpointAndGetBodyData($method, $endpoint . $url, $options);
     }
 
-    private function callEndpointAndGetBodyData($method, $urlExtension, $options)
+    private function callEndpointAndGetBodyData($method, $url, $options)
     {
         try {
             $response = $this->guzzle->request(
                 $method,
-                $this->endpoint . $urlExtension,
+                $url,
                 $options
             );
         } catch (GuzzleException $e) {
             $this->log('Error calling callEndpointAndGetBodyData: ' . $e->getMessage());
             $this->log('Passed options: ' . var_export($options, true));
             $this->log('Method: ' . $method);
-            $this->log('Endpoint: ' . self::ENDPOINT . $urlExtension);
+            $this->log('Endpoint: ' . $url);
 
             throw new InvitationException($e->getMessage(), $e->getCode(), $e);
         }
