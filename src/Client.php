@@ -93,7 +93,7 @@ class Client
 
         $json[empty($productsIds) ? 'products' : 'productIds'] = empty($productsIds) ? $products : $productsIds;
 
-        return $this->makeRequest('private/product-reviews/' . $context->getBusinessUnitId() . '/invitation-links', $json);
+        return $this->makeRequest('private/product-reviews/business-units/' . $context->getBusinessUnitId() . '/invitation-links', $json);
     }
 
     /**
@@ -118,7 +118,7 @@ class Client
             'language' => $language,
         ];
 
-        return $this->makeRequest('private/product-reviews/' . $businessUnitId . '/reviews', null, $query);
+        return $this->makeRequest('product-reviews/business-units/' . $businessUnitId . '/reviews', null, $query);
     }
 
     /**
