@@ -100,9 +100,11 @@ class Client
             'referenceId' => $referenceId,
             'locale' => $context->getLocale(),
             'consumer' => [
-                'name' => $recipient->getName(),
-                'email' => $recipient->getEmail()
+                'email' => $recipient->getEmail(),
+                'name' => $recipient->getName()
             ],
+            'email' => $recipient->getEmail(),
+            'name' => $recipient->getName(),
             'redirectUri' => $context->getRedirectUri(),
         ];
 
@@ -178,6 +180,7 @@ class Client
 
     private function callEndpointAndGetBodyData($method, $url, $options)
     {
+            $this->log('Passed options: ' . var_export($options, true));
         try {
             $response = $this->guzzle->request(
                 $method,
