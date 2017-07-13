@@ -115,6 +115,27 @@ class Client
 
     /**
      * @param string $businessUnitId
+     * @param int $page
+     * @param int $perPage
+     * @return array
+     */
+    public function getProductReviewsSummariesList(
+        $businessUnitId,
+        $page = 1,
+        $perPage = 100
+    ) {
+        $query = [
+            'page' => $page,
+            'perPage' => $perPage,
+        ];
+
+        $url = 'product-reviews/business-units/' . $businessUnitId . '/summaries';
+
+        return $this->makeRequest($url, [], $query, $this->endpointApi);
+    }
+
+    /**
+     * @param string $businessUnitId
      * @param string[] $sku
      * @param string $language
      * @param int $page
