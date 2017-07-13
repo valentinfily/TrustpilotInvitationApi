@@ -115,16 +115,19 @@ class Client
 
     /**
      * @param string $businessUnitId
+     * @param string $apiKey
      * @param int $page
      * @param int $perPage
      * @return array
      */
     public function getProductReviewsSummariesList(
         $businessUnitId,
+        $apiKey,
         $page = 1,
         $perPage = 100
     ) {
         $query = [
+            'apikey' => $apiKey,
             'page' => $page,
             'perPage' => $perPage,
         ];
