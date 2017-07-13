@@ -115,24 +115,21 @@ class Client
 
     /**
      * @param string $businessUnitId
-     * @param string $apiKey
      * @param int $page
      * @param int $perPage
      * @return array
      */
     public function getProductReviewsSummariesList(
         $businessUnitId,
-        $apiKey,
         $page = 1,
         $perPage = 100
     ) {
         $query = [
-            'apikey' => $apiKey,
             'page' => $page,
             'perPage' => $perPage,
         ];
 
-        $url = 'product-reviews/business-units/' . $businessUnitId . '/summaries';
+        $url = 'private/product-reviews/business-units/' . $businessUnitId . '/summaries';
 
         return $this->makeRequest($url, [], $query, $this->endpointApi);
     }
@@ -140,6 +137,7 @@ class Client
     /**
      * @param string $businessUnitId
      * @param string[] $sku
+     * @param string[] $state
      * @param string $language
      * @param int $page
      * @param int $perPage
@@ -148,6 +146,7 @@ class Client
     public function getProductReviews(
         $businessUnitId,
         $sku,
+        $state = ['published', 'unpublished', 'underModeration', 'archived'],
         $language = 'de',
         $page = 1,
         $perPage = 100
@@ -157,9 +156,10 @@ class Client
             'perPage' => $perPage,
             'sku' => implode(',', $sku),
             'language' => $language,
+            'state' => implode(',', $state),
         ];
 
-        $url = 'product-reviews/business-units/' . $businessUnitId . '/reviews';
+        $url = 'private/product-reviews/business-units/' . $businessUnitId . '/reviews';
 
         return $this->makeRequest($url, [], $query, $this->endpointApi);
     }
