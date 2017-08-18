@@ -15,7 +15,7 @@ Install using [composer](https://getcomposer.org/):
 composer install itspirit/trustpilot-invitation-api
 ```
 
-## Usage
+## Usage Invitation
 
 ```php
 use Trustpilot\Api\Authenticator\Authenticator;
@@ -37,4 +37,19 @@ $recipient = new Recipient($recipientEmail, $recipientName);
 $sender    = new Sender($senderEmail, $senderName, $replyTo);
 
 $client->invite($context, $recipient, $sender, $reference) /* : array */
+```
+
+## Usage fetch Product reviews
+
+```php
+use Trustpilot\Api\Authenticator\Authenticator;
+use Trustpilot\Api\Invitation\Client;
+
+$authenticator = new Authenticator($apiKey, $apiToken, $username, $password);
+$accessToken = $authenticator->getAccessToken();
+
+$client = new Client($accessToken);
+
+$reviews = $client->getProductReviews(TRUSTPILOT_BUSINESS_UNIT_ID, null,
+                ['published', 'unpublished', 'underModeration', 'archived'], 'de', $page, 100)
 ```
