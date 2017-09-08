@@ -145,19 +145,22 @@ class Client
      */
     public function getProductReviews(
         $businessUnitId,
-        $sku,
-        $state = ['published', 'unpublished', 'underModeration', 'archived'],
-        $language = 'de',
         $page = 1,
-        $perPage = 100
+        $perPage = 100,
+        $sku = null,
+        $state = ['published'],
+        $language = 'de'
     ) {
         $query = [
             'page' => $page,
             'perPage' => $perPage,
-            'sku' => implode(',', $sku),
             'language' => $language,
             'state' => implode(',', $state),
         ];
+
+        if (is_array($sku)) {
+            $query['sku'] = implode(',', $sku);
+        }
 
         $url = 'private/product-reviews/business-units/' . $businessUnitId . '/reviews';
 
