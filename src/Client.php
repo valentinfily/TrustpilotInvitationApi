@@ -80,6 +80,25 @@ class Client
 
         return $this->makeRequest($url, $json, [], $this->endpointInvitationApi);
     }
+    
+   /**
+     * @param InvitationContext $context
+     * @param Recipient $recipient
+     * @return array
+    */
+
+    public function deleteCustomerData(InvitationContext $context, Recipient $recipient) {
+
+        $json = [
+            'customerEmails' => [
+                $recipient->getEmail()
+            ]
+            ];
+            
+        $url = 'private/business-units/' . $context->getBusinessUnitId() . '/invitation-data/delete';
+
+        return $this->makeRequest($url, $json, [], $this->endpointInvitationApi);
+    }
 
     /**
      * @param ProductReviewInvitationContext $context
